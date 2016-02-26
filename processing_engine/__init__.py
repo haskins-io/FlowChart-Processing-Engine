@@ -52,7 +52,7 @@ def _create_processing_engine(xml_obj):
     mx_cells = xml_obj.mxGraphModel.root.mxCell
 
     #
-    # Find all Actions and Links
+    # Find all Actions and Links that are defined as mxCell
     #
     for cell in mx_cells:
 
@@ -61,11 +61,8 @@ def _create_processing_engine(xml_obj):
 
             # Is Action cell
             if cell.get_attribute('value') is not None and cell.get_attribute('connectable') is None:
+                _add_element_to_maps(maps, cell_id, cell)
 
-                map_name = cell.get_attribute('value')
-                map_element = MapElement(name=map_name, element=map_name)
-                maps[cell_id] = map_element
-                
             # Is Link Cell
             if cell.get_attribute('source') is not None and cell.get_attribute('target') is not None:
 
@@ -74,6 +71,22 @@ def _create_processing_engine(xml_obj):
                     'target': cell.get_attribute('target'),
                     'boolean': True
                 }
+
+    #
+    # Find all Actions that are defined as object
+    #
+    try:
+        objects = xml_obj.mxGraphModel.root.object
+        for obj in objects:
+
+            obj_id = str(obj['id'])
+            if obj_id != '0' and obj_id != '1':
+                _add_element_to_maps(maps, obj_id, obj)
+
+    except Exception as e:
+
+        # There might not have been any Objects defined in the XML so we'll catch and output the exception message
+        print e.message
 
     #
     # Update links with YES or NO value
@@ -91,7 +104,7 @@ def _create_processing_engine(xml_obj):
                 link_data['boolean'] = False
                 links[link_parent] = link_data
 
-    processengine = ProcessingEngine()
+    processing_engine = ProcessingEngine()
 
     #
     # Update Action yes/no elements
@@ -111,16 +124,27 @@ def _create_processing_engine(xml_obj):
         else:
             source_action.set_element_type("Processor")
 
-        processengine.add_action(source_action.name(), source_action)
+        processing_engine.add_action(source_action.name(), source_action)
 
     #
-    # Need to add 'End' as it has no target links so won't be picked up in the last section
+    # Find elements that haven't been added to the engine and add them. These will most likely be orphaned elements or elements at the end of a flow.
     #
     for key, map_element in maps.iteritems():
 
         element_name = map_element.name()
-        if not processengine.has_action(element_name):
+        if not processing_engine.has_action(element_name):
             map_element.set_element_type("Processor")
-            processengine.add_action(element_name, map_element)
+            processing_engine.add_action(element_name, map_element)
 
-    return processengine
+    return processing_engine
+
+
+def _add_element_to_maps(maps, element_id, xml_element):
+
+    map_name = xml_element.get_attribute('value')
+    map_element = MapElement(name=map_name, element=map_name)
+
+    # untangle doesn't expose the attributes via a public function so we'll have to be naughty and get them via the private variable
+    map_element.set_attribs(xml_element._attributes)  # noqa
+
+    maps[element_id] = map_element
