@@ -60,7 +60,7 @@ class ProcessingEngine(object):
             else:
                 my_class = getattr(self._processes, current_action_name)
 
-            instance = my_class()
+            instance = my_class(attributes=current_action.attribs())
 
             yes = True
             if 'Decision' in element_type:
