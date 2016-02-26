@@ -21,6 +21,7 @@ class MapElement(object):
         self._el_type = None
         self._el_yes = None
         self._el_no = None
+        self._attribs = {}
 
     def name(self):
         """
@@ -59,6 +60,20 @@ class MapElement(object):
         """
         return self._el_class
 
+    def attribs(self):
+        """
+        Attributes associated with the Element
+        :return: Attributes as Dictionary
+        """
+        return self._attribs
+
+    def set_attribs(self, attributes):
+        """
+        Sets attributes associated with the Element
+        :param attributes: Attribbutes as a dictionary
+        """
+        self._attribs = attributes
+
     def set_yes_element(self, element):
         """
         Sets the element that will be called next if the outcome is TRUE
@@ -84,7 +99,19 @@ class MapElement(object):
         return "{} : yes -> {} : no -> {} : Type -> {}".format(self._el_name, self._el_yes, self._el_no, self._el_type)
 
 
-class Decision(object):
+class AbstractAction(object):
+
+    """
+    Abstract class that all Decision Action should extend
+    """
+
+    __metaclass__ = abc.ABCMeta
+
+    def __init__(self, attributes):
+        self._attrib = attributes
+
+
+class Decision(AbstractAction):
 
     """
     Abstract class that all Decision Action should extend
@@ -102,7 +129,7 @@ class Decision(object):
         """
 
 
-class Process(object):
+class Process(AbstractAction):
 
     """
     Abstract class that all Process Actions should extend
