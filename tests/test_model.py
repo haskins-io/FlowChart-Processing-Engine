@@ -46,3 +46,12 @@ class TestModel(unittest.TestCase):
         m.set_no_element("AnElement")
 
         self.assertEqual("AnElement", m.no_action())
+
+    def test_attributes(self):
+
+        m = MapElement("Name", "Element")
+        m.set_attribs({"TestKey": "TestValue"})
+
+        test_attibutes = m.attribs()
+        test_attribute = test_attibutes['TestKey']
+        self.assertEqual("TestValue", test_attribute)
