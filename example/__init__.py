@@ -10,7 +10,7 @@ class PayLoad(object):
         self.val += by
 
 
-engine = processing_engine.load("/Users/mark.haskins/Dropbox/Code/FlowChartProcessingEngine/example/data/test_data.xml")
+engine = processing_engine.load("/path/to/test_data.xml")
 
 payload = PayLoad(initial_value=5)
 engine.process(payload)
