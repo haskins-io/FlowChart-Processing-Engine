@@ -32,6 +32,13 @@ Currently the engine only has the concept of two types of elements on a chart:
 * Process : Can have multiple Sources but only single target
 
 
+#### XML Attributes
+
+All attributes associated with the XML elements contained within the XML file will be loaded and associated with the appropriate Decision and Process. This means
+that you can follow good OO principals by only creating an Action once and using it in multiple places customising it for it's position in the chart. An example
+of this might be a **SendEmail** process that is capable of sending an email to the address that is defined by the Attribute of the individual Action.
+
+
 #### Gotchas
 
 Currently the Processing Engine performs no validation of the XML data provided other than - is it valid XML. It simply parses the XML and attempts to create a 
