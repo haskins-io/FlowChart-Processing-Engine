@@ -16,6 +16,10 @@ class End(Process):
 class ProcessOne(Process):
 
     def process(self, payload):
+
+        if 'SnsTopic' in self._attrib:
+            print self._attrib['SnsTopic']
+
         print "Incrementing by : 1"
         payload.increment(1)
 
@@ -58,6 +62,7 @@ class ProcessSix(Process):
 class ProcessSeven(Process):
 
     def process(self, payload):
+
         print "Incrementing by : 7"
         payload.increment(7)
 
