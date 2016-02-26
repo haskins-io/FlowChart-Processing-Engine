@@ -85,7 +85,7 @@ def _create_processing_engine(xml_obj):
 
     except Exception as e:
 
-        # There might not have been any Objects defined in the XML so we'll catch and output the exception message
+        # There might not have been any Objects defined in the XML so we'll catch the exeception and print out the message
         print e.message
 
     #
