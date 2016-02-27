@@ -1,3 +1,5 @@
+import os
+
 import processing_engine
 
 
@@ -10,7 +12,8 @@ class PayLoad(object):
         self.val += by
 
 
-engine = processing_engine.load("/path/to/test_data.xml")
+data_file_path = os.getcwd() + "/data/test_data.xml"
+engine = processing_engine.load(data_file_path)
 
 payload = PayLoad(initial_value=5)
 engine.process(payload)
