@@ -145,6 +145,18 @@ def _add_element_to_maps(maps, element_id, xml_element):
     map_element = MapElement(name=map_name, element=map_name)
 
     # untangle doesn't expose the attributes via a public function so we'll have to be naughty and get them via the private variable
-    map_element.set_attribs(xml_element._attributes)  # noqa
+    attribs = xml_element._attributes
+
+    # remove flowchart positional attributes
+    attribs.pop("id", None)
+    attribs.pop("style", None)
+    attribs.pop("edge", None)
+    attribs.pop("source", None)
+    attribs.pop("target", None)
+    attribs.pop("parent", None)
+    attribs.pop("vertex", None)
+    attribs.pop("connectable", None)
+
+    map_element.set_attribs(attribs)
 
     maps[element_id] = map_element
